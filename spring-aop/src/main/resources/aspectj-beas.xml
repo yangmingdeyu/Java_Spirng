@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       ">
+    <!-- 目标类  -->
+    <bean id="userService" class="com.qf.spring.aop.service.impl.UserServiceImpl"/>
+    <!--   配置增强类 -->
+    <bean id="advice" class="com.qf.spring.aop.advice.MyAspectJAdvice"/>
+    <!-- 配置AOp   -->
+    <aop:config>
+        <!-- 配置切入点   后面的表达式的意思是在这个包下的所有类的所有方法中返回值为任意的任意参数的方法-->
+        <aop:pointcut id="pc" expression="execution(* com.qf.spring.aop.service..*.*(..) )"/>
+        <!--  直接配置切面     ref就是我们增强类,有五种子标签 -->
+        <aop:aspect ref="advice">
+            <!--   前置增强  pointcut-ref是引用切入点   -->
+            <aop:before method="before" pointcut-ref="pc"/>
+            <!--   环绕增强    -->
+            <aop:around method="around" pointcut-ref="pc"/>
+            <!--   异常抛出增强    -->
+            <aop:after-throwing method="throwing" pointcut-ref="pc" throwing="e"/>
+            <!--   最终增强    -->
+            <aop:after method="after" pointcut-ref="pc"/>
+            <!--   后置增强    -->
+            <aop:after-returning method="afterReturning" pointcut-ref="pc" returning="resut"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>

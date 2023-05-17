@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       ">
+    <!-- 目标类  -->
+    <bean id="userService" class="com.qf.spring.aop.service.impl.UserServiceImpl"/>
+    <!-- 增强类  -->
+    <bean id="myAdvice" class="com.qf.spring.aop.advice.MyBeforeAdvice"/>
+    <!-- 进行aop的配置   -->
+    <aop:config>
+        <!--  切点   expression里面写的是切入点表达式 , 表四切入到所有的save方法上-->
+        <aop:pointcut id="myPointCut" expression="execution(* save())"/>
+        <!--  绑定增强代码到切入点 advisor是增强的意思 advice-ref:增强类是什么,poingcut-ref:切入点是哪个   -->
+        <aop:advisor advice-ref="myAdvice" pointcut-ref="myPointCut"/>
+    <!--   完成上面的工作表示会在save方法上进行增强 -->
+    </aop:config>
+</beans>
